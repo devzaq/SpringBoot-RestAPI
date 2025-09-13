@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class VersioningPersonController {
 
-    // API VERSIONING USING URL
+    // API VERSIONING USING URL (twitter)
     @GetMapping("/v1/person")
     public PersonV1 getFirstVersionOfPerson(){
         return new PersonV1("Ankit Jha");
@@ -17,7 +17,7 @@ public class VersioningPersonController {
         return new PersonV2("Ankit","Jha");
     }
 
-    // API VERSIONING USING REQUEST PARAMS
+    // API VERSIONING USING REQUEST PARAMS (amazon)
     @GetMapping(path = "/person", params = "version=1")
     public PersonV1 getFirstVersionOfPersonUsingRequestParams(){
         return new PersonV1("Ankit Jha");
@@ -28,7 +28,7 @@ public class VersioningPersonController {
         return new PersonV2("Ankit","Jha");
     }
 
-    // API VERSIONING USING CUSTOM REQUEST HEADERS
+    // API VERSIONING USING CUSTOM REQUEST HEADERS (microsoft)
     @GetMapping(path = "/person", headers = "X-API-VERSION=1")
     public PersonV1 getFirstVersionOfPersonRequestHeader(){
         return new PersonV1("Ankit Jha");
@@ -39,7 +39,7 @@ public class VersioningPersonController {
         return new PersonV2("Ankit","Jha");
     }
 
-    // API VERSIONING USING ACCEPT HEADERS
+    // API VERSIONING USING ACCEPT HEADERS (github)
     @GetMapping(path = "/person", produces = "application/vnd.company.app-v1+json")
     public PersonV1 getFirstVersionOfPersonAcceptHeader(){
         return new PersonV1("Ankit Jha");
