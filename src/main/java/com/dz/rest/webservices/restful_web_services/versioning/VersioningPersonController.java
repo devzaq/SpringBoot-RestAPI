@@ -38,5 +38,16 @@ public class VersioningPersonController {
     public PersonV2 getSecondVersionOfPersonRequestHeader(){
         return new PersonV2("Ankit","Jha");
     }
+
+    // API VERSIONING USING ACCEPT HEADERS
+    @GetMapping(path = "/person", produces = "application/vnd.company.app-v1+json")
+    public PersonV1 getFirstVersionOfPersonAcceptHeader(){
+        return new PersonV1("Ankit Jha");
+    }
+
+    @GetMapping(path = "/person", produces = "application/application/vnd.company.app-v1+json")
+    public PersonV2 getSecondVersionOfPersonAcceptHeader() {
+        return new PersonV2("Ankit", "Jha");
+    }
 }
 
