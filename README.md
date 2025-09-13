@@ -1,6 +1,6 @@
 # Simple Social media REST api 
 
-## **Handling Exceptions with @ControllerAdvice**
+## **Handling Exceptions with `@ControllerAdvice`**
 * [Get Started with Custom Error Handling in Spring Boot (Java)](https://auth0.com/blog/get-started-with-custom-error-handling-in-spring-boot-java/)
 * [Spring Boot Error Handling: A Step-by-Step Guide](https://inspector.dev/spring-boot-error-handling-a-step-by-step-guide/)
 
@@ -17,8 +17,36 @@ A resource can have multiple representations
 * JSON
 
 ## Internationalization i18n 
-* Typically, HTTP request header - **Accept-Language** is used
+* Typically, HTTP request header - `Accept-Language` is used
 * Accept-Language indicates natural language and locale that consumer prefers
 * [Decoding i18n Challenges in Spring Boot 3: Exploring Internationalization](https://medium.com/yildiztech/decoding-i18n-challenges-in-spring-boot-3-exploring-internationalization-895a4ac627df)
 * [Spring Boot internationalization i18n](https://lokalise.com/blog/spring-boot-internationalization/)
 * [Guide to Internationalization in Spring Boot](https://www.baeldung.com/spring-boot-internationalization)
+
+
+## Hateoas 
+>     @GetMapping("/users/{id}")
+        public EntityModel<User> retrieveUser(@PathVariable int id){
+        User user = service.findOne(id);
+        if(user == null){
+            throw new UserNotFoundException("id: " + id);
+        }
+        EntityModel<User> entityModel =  EntityModel.of(user);
+        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
+        entityModel.add(link.withRel("all-users"));
+        return entityModel;
+    }
+
+* using hateoas to send navigation links along with the response 
+* `User` is wrapped with `EntityModel` 
+* Links are added using `WebMvcLinkBuilder` to the `EntityModel`
+
+
+## Customizing REST api response 
+* Customizing field names in response with `@JsonProperty("user_name")`
+* Return only selected fields with 
+  * **Static Filtering**
+    * `@JsonIgnoreProperties({"filed1", "field2"})` class level, `@JsonIgnore` on methods
+  * **Dynamic Filtering**
+    * `@JsonFilter` with `FilterProvider`
+*

@@ -30,13 +30,9 @@ public class UserResources {
         if(user == null){
             throw new UserNotFoundException("id: " + id);
         }
-
-        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
-
         EntityModel<User> entityModel =  EntityModel.of(user);
-
+        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
         entityModel.add(link.withRel("all-users"));
-
         return entityModel;
     }
 
