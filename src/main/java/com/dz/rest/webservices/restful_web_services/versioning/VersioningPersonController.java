@@ -1,12 +1,12 @@
 package com.dz.rest.webservices.restful_web_services.versioning;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class VersioningPersonController {
 
+    // API VERSIONING USING URL
     @GetMapping("/v1/person")
     public PersonV1 getFirstVersionOfPerson(){
         return new PersonV1("Ankit Jha");
@@ -17,6 +17,7 @@ public class VersioningPersonController {
         return new PersonV2("Ankit","Jha");
     }
 
+    // API VERSIONING USING REQUEST PARAMS
     @GetMapping(path = "/person", params = "version=1")
     public PersonV1 getFirstVersionOfPersonUsingRequestParams(){
         return new PersonV1("Ankit Jha");
@@ -24,6 +25,17 @@ public class VersioningPersonController {
 
     @GetMapping(path = "/person", params = "version=2")
     public PersonV2 getSecondVersionOfPersonUsingRequestParams(){
+        return new PersonV2("Ankit","Jha");
+    }
+
+    // API VERSIONING USING CUSTOM REQUEST HEADERS
+    @GetMapping(path = "/person", headers = "X-API-VERSION=1")
+    public PersonV1 getFirstVersionOfPersonRequestHeader(){
+        return new PersonV1("Ankit Jha");
+    }
+
+    @GetMapping(path = "/person", headers = "X-API-VERSION=2")
+    public PersonV2 getSecondVersionOfPersonRequestHeader(){
         return new PersonV2("Ankit","Jha");
     }
 }
