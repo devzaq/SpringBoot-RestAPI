@@ -25,17 +25,19 @@ A resource can have multiple representations
 
 
 ## Hateoas 
->     @GetMapping("/users/{id}")
-        public EntityModel<User> retrieveUser(@PathVariable int id){
-        User user = service.findOne(id);
-        if(user == null){
-            throw new UserNotFoundException("id: " + id);
-        }
-        EntityModel<User> entityModel =  EntityModel.of(user);
-        WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
-        entityModel.add(link.withRel("all-users"));
-        return entityModel;
-    }
+```     
+@GetMapping("/users/{id}")
+public EntityModel<User> retrieveUser(@PathVariable int id){
+  User user = service.findOne(id);
+  if(user == null){
+      throw new UserNotFoundException("id: " + id);
+  }
+  EntityModel<User> entityModel =  EntityModel.of(user);
+  WebMvcLinkBuilder link = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
+  entityModel.add(link.withRel("all-users"));
+  return entityModel;
+}
+```
 
 * using hateoas to send navigation links along with the response 
 * `User` is wrapped with `EntityModel` 
@@ -52,8 +54,10 @@ A resource can have multiple representations
 
 ## [Actuator](https://www.baeldung.com/spring-boot-actuators)
 monitor and manage your application in production, Monitoring our app, gathering metrics, and understanding traffic or the state of our database becomes trivial with this dependency.
->     management.endpoints.web.exposure.include=*
->     management.endpoint.env.show-values=ALWAYS
+```
+management.endpoints.web.exposure.include=*
+management.endpoint.env.show-values=ALWAYS
+```
 
 ## HAL (JSON Hypertext Application Language)
 * Simple format that gives consistent and easy way to hyperlink between resources in your API
@@ -76,10 +80,12 @@ monitor and manage your application in production, Monitoring our app, gathering
 >      spring.jpa.hibernate.ddl-auto=update 
 > spring boot autoconfiguration won't automatically create all the schema based on the entity when using mysql 
     
->   spring.datasource.url=jdbc:mysql://localhost:3306/social-media-database
-    spring.datasource.username=social-media-user
-    spring.datasource.password=dummypassword
-    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/social-media-database
+spring.datasource.username=social-media-user
+spring.datasource.password=dummypassword
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
 
 `/social-media-database` is the name of the database
 >     docker run --detach --env MYSQL_ROOT_PASSWORD=dummypassword --env MYSQL_USER=social-media-user --env MYSQL_PASSWORD=dummypassword --env MYSQL_DATABASE=social-media-database --name mysql --publish 3306:3306 mysql:8-oracle
@@ -87,3 +93,45 @@ monitor and manage your application in production, Monitoring our app, gathering
 
 >     spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 >  This dialect informs Hibernate about the specific SQL syntax and features supported by the underlying database, allowing it to generate optimized SQL queries.
+> 
+
+## Spring Security
+>     spring.security.user.name=user 
+>     spring.security.user.password=dummy
+> to configure the default username and password 
+
+* Spring security puts series of filter chains with `Cross Site Request Forgery (CSRF)` protecting the put / post request.
+#### If you want to override the existing the filter chain you have to define the filter chain yourself
+``` 
+@Configuration
+public class SpringSecurityConfiguration {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity.build();
+  }
+}
+```
+* using the above configuration disables all the filter chains so we have to configure it manually by adding
+1. All the request should be authenticated
+2. If request is not authenticated a webpage is shown
+3. CSRF -> POST, PUT
+
+```
+@Configuration
+public class SpringSecurityConfiguration {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+//      1. All the request should be authenticated
+        httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().authenticated());
+//      2. If request is not authenticated a webpage is shown
+        httpSecurity.httpBasic(Customizer.withDefaults());
+//      3. CSRF -> POST, PUT 
+        httpSecurity.csrf().disable();
+        return httpSecurity.build();
+    }
+}
+```
+
+>     httpSecurity.httpBasic(Customizer.withDefaults());
+>    creates basic popup with username and password 
+`.csrf() is deprecated` and should be avoided
