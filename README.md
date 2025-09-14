@@ -49,4 +49,8 @@ A resource can have multiple representations
     * `@JsonIgnoreProperties({"filed1", "field2"})` class level, `@JsonIgnore` on methods
   * **Dynamic Filtering**
     * `@JsonFilter` with `FilterProvider`
-*
+
+## [Actuator](https://www.baeldung.com/spring-boot-actuators)
+monitor and manage your application in production, Monitoring our app, gathering metrics, and understanding traffic or the state of our database becomes trivial with this dependency.
+>     management.endpoints.web.exposure.include=*
+>     management.endpoint.env.show-values=ALWAYS
