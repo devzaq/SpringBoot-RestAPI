@@ -123,10 +123,16 @@ public class SpringSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 //      1. All the request should be authenticated
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().authenticated());
+
 //      2. If request is not authenticated a webpage is shown
         httpSecurity.httpBasic(Customizer.withDefaults());
-//      3. CSRF -> POST, PUT 
+
+//      3. Whenever disabling CSRF session should be stateless
+        httpSecurity.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+//      4. CSRF -> POST, PUT (csrf blocks the put/post req by default)
         httpSecurity.csrf().disable();
+
         return httpSecurity.build();
     }
 }
