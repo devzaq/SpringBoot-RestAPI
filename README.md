@@ -25,7 +25,7 @@ A resource can have multiple representations
 
 
 ## Hateoas 
-```     
+```java     
 @GetMapping("/users/{id}")
 public EntityModel<User> retrieveUser(@PathVariable int id){
   User user = service.findOne(id);
@@ -54,7 +54,7 @@ public EntityModel<User> retrieveUser(@PathVariable int id){
 
 ## [Actuator](https://www.baeldung.com/spring-boot-actuators)
 monitor and manage your application in production, Monitoring our app, gathering metrics, and understanding traffic or the state of our database becomes trivial with this dependency.
-```
+```properties
 management.endpoints.web.exposure.include=*
 management.endpoint.env.show-values=ALWAYS
 ```
@@ -80,7 +80,7 @@ management.endpoint.env.show-values=ALWAYS
 >      spring.jpa.hibernate.ddl-auto=update 
 > spring boot autoconfiguration won't automatically create all the schema based on the entity when using mysql 
     
-```
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/social-media-database
 spring.datasource.username=social-media-user
 spring.datasource.password=dummypassword
@@ -96,13 +96,15 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 > 
 
 ## Spring Security
->     spring.security.user.name=user 
->     spring.security.user.password=dummy
+```properties
+spring.security.user.name=user 
+spring.security.user.password=dummy
+```
 > to configure the default username and password 
 
 * Spring security puts series of filter chains with `Cross Site Request Forgery (CSRF)` protecting the put / post request.
 #### If you want to override the existing the filter chain you have to define the filter chain yourself
-``` 
+```java
 @Configuration
 public class SpringSecurityConfiguration {
   @Bean
@@ -116,7 +118,7 @@ public class SpringSecurityConfiguration {
 2. If request is not authenticated a webpage is shown
 3. CSRF -> POST, PUT
 
-```
+```java
 @Configuration
 public class SpringSecurityConfiguration {
     @Bean
